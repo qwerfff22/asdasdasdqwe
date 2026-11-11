@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#07090c">
+<meta name="description" content="Floor 12: Anarchy — a choice-driven survival thriller. The city has fallen. You are trapped on the 12th floor. Your neighbour Max is texting you.">
+<title>Floor 12: Anarchy</title>
+<link rel="stylesheet" href="style.css">
+<!-- Yandex Games SDK is loaded by js/sdk.js on http(s) hosting. Offline / file:// works without it. -->
+</head>
+<body>
+<div id="app">
+
+  <!-- ===== STAGE: parallax scene + characters + lighting ===== -->
+  <main id="stage" aria-label="Scene">
+    <div id="scene" class="scene"></div>
+    <div id="cast" class="cast" aria-hidden="true"></div>
+    <div id="light" class="light" aria-hidden="true"><i class="l-flash"></i><i class="l-shadow"></i><i class="l-vignette"></i><i class="l-rain"></i></div>
+    <div id="bars" class="bars" aria-hidden="true"><i></i><i></i></div>
+  </main>
+
+  <!-- ===== HUD ===== -->
+  <header id="hud" class="hud hidden">
+    <div class="hud-l">
+      <div class="clock" id="clock"><b id="clockT">21:00</b><span id="locName">Apt 47 · Floor 12</span></div>
+    </div>
+    <div class="hud-r">
+      <button class="hbtn" id="btnPhone" aria-label="Phone"><svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M10.5 18.5h3"/></svg><i class="badge hidden" id="phoneBadge"></i></button>
+      <button class="hbtn" id="btnPause" aria-label="Menu"><svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h14"/></svg></button>
+    </div>
+  </header>
+
+  <!-- ===== CAPTION / DIALOGUE ===== -->
+  <div id="caption" class="caption hidden" role="button" tabindex="0" aria-live="polite">
+    <div class="cap-name" id="capName"></div>
+    <div class="cap-text" id="capText"></div>
+    <div class="cap-next" aria-hidden="true"></div>
+  </div>
+
+  <!-- ===== PHONE ===== -->
+  <section id="phone" class="phone" aria-label="Phone">
+    <div class="ph-body">
+      <div class="ph-status"><span id="phTime">21:00</span><span class="ph-notch"></span><span class="ph-sig"><i></i><i></i><i></i><i></i> <b id="phBat">31%</b></span></div>
+      <div class="ph-head">
+        <button class="ph-back" id="phClose" aria-label="Put phone away"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <div class="ph-av" id="phAv"></div>
+        <div class="ph-who"><b id="phName">Max · 45</b><span id="phState">online</span></div>
+      </div>
+      <div class="ph-msgs" id="phMsgs"></div>
+      <div class="ph-timer hidden" id="phTimer"><i></i><span></span></div>
+      <div class="ph-choices" id="phChoices"></div>
+      <form class="ph-input" id="phForm" autocomplete="off">
+        <input id="phInput" type="text" maxlength="80" placeholder="Message" disabled aria-label="Type a reply">
+        <button type="submit" id="phSend" aria-label="Send" disabled><svg viewBox="0 0 24 24"><path d="M4 12l16-8-6 16-2-7z"/></svg></button>
+      </form>
+    </div>
+  </section>
+  <div id="notif" class="notif" role="button" tabindex="0"><div class="nt-av" id="ntAv"></div><div class="nt-t"><b id="ntName"></b><span id="ntText"></span></div><time id="ntTime"></time></div>
+
+  <!-- ===== MINI-GAMES ===== -->
+  <section id="mini" class="mini hidden" aria-live="polite"></section>
+
+  <!-- ===== SCREENS ===== -->
+  <section id="scr-title" class="screen">
+    <div class="t-main">
+      <div class="t-kicker">Day 9 of the blackout</div>
+      <h1 class="t-logo"><span class="t-floor">FLOOR</span><span class="t-12">12</span><span class="t-anarchy">ANARCHY</span></h1>
+      <p class="t-tag">No virus. No army. Just your neighbours, and the night.</p>
+      <nav class="t-menu">
+        <button class="mbtn primary hidden" id="btnContinue">Continue</button>
+        <button class="mbtn" id="btnNew">New game</button>
+        <button class="mbtn" id="btnSettings">Settings</button>
+        <button class="mbtn" id="btnEndings">Endings</button>
+        <button class="mbtn" id="btnCredits">Credits</button>
+      </nav>
+      <div class="t-foot"><span id="tVersion">v1.0</span><span>Headphones recommended</span></div>
+    </div>
+    <button class="hbtn t-fs" id="btnFs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+  </section>
+
+  <section id="scr-end" class="screen">
+    <div class="e-box">
+      <div class="e-kind" id="eKind"></div>
+      <h2 class="e-title" id="eTitle"></h2>
+      <div class="e-text" id="eText"></div>
+      <div class="e-stats" id="eStats"></div>
+      <div class="e-btns">
+        <button class="mbtn primary" id="btnEndRetry">Retry from checkpoint</button>
+        <button class="mbtn" id="btnEndNew">New game</button>
+        <button class="mbtn" id="btnEndMenu">Main menu</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== MODAL (settings, pause, credits, endings) ===== -->
+<div id="modal" class="modal"><div class="sheet" id="sheet"></div></div>
+<div id="toast" class="toast"></div>
+<div id="rotate" class="rotate"><svg viewBox="0 0 48 48"><rect x="14" y="6" width="20" height="36" rx="3"/><path d="M38 30a14 14 0 0 1-10 10M40 33l-2-4-4 1"/></svg><span>Landscape plays best. Portrait works too.</span></div>
+<div id="loader"><div class="ld-logo">FLOOR <b>12</b></div><div class="ld-bar"><i></i></div><div class="ld-t">Restoring power…</div></div>
+
+<!-- Each module registers itself on window.F12. Order matters. -->
+<script src="js/config.js"></script>
+<script src="js/sdk.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/art.js"></script>
+<script src="js/story.js"></script>
+<script src="js/minigames.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>
